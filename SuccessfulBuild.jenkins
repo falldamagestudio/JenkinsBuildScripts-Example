@@ -19,7 +19,7 @@ pipeline {
 		stage('Successful stage') {
 			steps {
 				script {
-					failedStage = env.STAGE_NAME
+					failedStage = STAGE_NAME
 					
 					echo "Hello World"
 				}
