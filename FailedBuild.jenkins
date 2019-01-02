@@ -19,7 +19,7 @@ pipeline {
 		stage('This stage will fail') {
 			steps {
 				script {
-					failedStage = env.STAGE_NAME
+					failedStage = STAGE_NAME
 					
 					error "Explicitly fail stage"
 				}
@@ -29,13 +29,13 @@ pipeline {
 	
 	post {
 		failure {
-			sendSlackBuildFailedNotification("${SLACK_CHANNEL}", "${PROJECT_NAME}", failedStage, committersToSlackNameLookup)
+			sendSlackBuildFailedNotification(SLACK_CHANNEL, PROJECT_NAME, failedStage, committersToSlackNameLookup)
 		}
 		success {
-			sendSlackBuildSucceededNotification("${SLACK_CHANNEL}", "${PROJECT_NAME}", committersToSlackNameLookup)
+			sendSlackBuildSucceededNotification(SLACK_CHANNEL, PROJECT_NAME, committersToSlackNameLookup)
 		}
 		unstable {
-			sendSlackBuildFailedNotification("${SLACK_CHANNEL}", "${PROJECT_NAME}", "Unstable", committersToSlackNameLookup)
+			sendSlackBuildFailedNotification(SLACK_CHANNEL, PROJECT_NAME, "Unstable", committersToSlackNameLookup)
 		}
 	}
 }
