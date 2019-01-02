@@ -14,9 +14,9 @@ pipeline {
 
 	stages {
 
-		stage('This stage will fail') {
+		stage('Process test results') {
 			steps {
-				error "Fail stage explicitly"
+				junit 'junit-example-results/two-successful-two-failed.xml'
 			}
 		}
 	}
