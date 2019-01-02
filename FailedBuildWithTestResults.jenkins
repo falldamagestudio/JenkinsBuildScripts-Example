@@ -20,7 +20,10 @@ pipeline {
 			steps {
 				script {
 					failedStage = env.STAGE_NAME
-					
+
+					// Update timestamps for the XML file, to ensure that the JUnit report aggregator will process the report
+					sh 'touch junit-example-results/two-successful-two-failed.xml'
+
 					junit 'junit-example-results/two-successful-two-failed.xml'
 				}
 			}
