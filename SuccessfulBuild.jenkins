@@ -1,6 +1,8 @@
 
 @Library("JenkinsBuildScripts") _
 
+def failedStage = null
+
 def committersToSlackNameLookup = [:]
 
 pipeline {
@@ -14,16 +16,20 @@ pipeline {
 
 	stages {
 
-		stage('Process test results') {
+		stage('Successful stage') {
 			steps {
-				junit 'junit-example-results/two-successful.xml'
+				script {
+					failedStage = env.STAGE_NAME
+					
+					echo "Hello World"
+				}
 			}
 		}
 	}
 	
 	post {
 		failure {
-			sendSlackBuildFailedNotification("${SLACK_CHANNEL}", "${PROJECT_NAME}", env.STAGE_NAME, committersToSlackNameLookup)
+			sendSlackBuildFailedNotification("${SLACK_CHANNEL}", "${PROJECT_NAME}", failedStage, committersToSlackNameLookup)
 		}
 		success {
 			sendSlackBuildSucceededNotification("${SLACK_CHANNEL}", "${PROJECT_NAME}", committersToSlackNameLookup)
