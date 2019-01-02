@@ -1,0 +1,41 @@
+
+@Library("JenkinsBuildScripts") _
+
+def failedStep = null
+
+def committersToSlackNameLookup = [:]
+
+pipeline {
+
+	agent { label 'master' }
+	
+	environment {
+		PROJECT_NAME = "JenkinsBuildScripts-Example"
+		SLACK_CHANNEL = "#test123"
+	}
+
+	stages {
+
+		stage('Process test results') {
+			steps {
+				script {
+					failedStep = 'Process test results'
+					
+					junit 'junit-example-results/two-successful-two-failed.xml'
+				}
+			}
+		}
+	}
+	
+	post {
+		failure {
+			sendSlackBuildFailedNotification("${SLACK_CHANNEL}", "${PROJECT_NAME}", env.STAGE_NAME, committersToSlackNameLookup)
+		}
+		success {
+			sendSlackBuildSucceededNotification("${SLACK_CHANNEL}", "${PROJECT_NAME}", committersToSlackNameLookup)
+		}
+		unstable {
+			sendSlackBuildFailedNotification("${SLACK_CHANNEL}", "${PROJECT_NAME}", "Unstable", committersToSlackNameLookup)
+		}
+	}
+}
