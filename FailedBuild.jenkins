@@ -21,7 +21,7 @@ pipeline {
 				script {
 					failedStage = env.STAGE_NAME
 					
-					error "Explicitly fail stage
+					error "Explicitly fail stage"
 				}
 			}
 		}
